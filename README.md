@@ -3,7 +3,14 @@ This repository includes different machine learning example for practice.
 
 Before we start: 
 Language used: python 3
-Installations needed using the terminal:  
+Installations needed: 
+What: 
+- sklearn 
+- quandl : marketplace for financial economic data provided in a python friendly format 
+	example: wiki stock data used in our example 
+- pandas
+
+Where: Terminal 
 - pip install sklearn 
-- pip install quandl
+- pip install quandl 
 - pip install pandas
