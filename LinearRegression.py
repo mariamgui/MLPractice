@@ -7,7 +7,12 @@ from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import cross_validate
 from sklearn.model_selection import train_test_split
 ## get stock data
-df = quandl.get('WIKI/GOOGL')
+
+
+#df = quandl.get('WIKI/GOOGL')
+#df.to_csv('WIKI_GOOGL.csv')
+
+df = pd.read_csv('WIKI_GOOGL.csv')  
 ## Select only attribute needed
 ## Linear regression does not seek out patterns between features
 ## Adj. Open is a feature = attribute 
@@ -21,7 +26,6 @@ df['PCT_Change'] = 100 * (df["Adj. Close"] - df["Adj. Open"]) / df["Adj. Open"]
 ## volume is how many trades occured that day 
 df = df[['Adj. Close', 'HL_PCT', 'PCT_Change', 'Adj. Volume']]
 
-pprint(df.head())
 
 forecast_col = "Adj. Close"
 ## instead of deleting NA data
@@ -30,23 +34,26 @@ df.fillna(-99999, inplace = True)
 forecast_out = math.ceil(0.01*len(df))
 df ['label'] = df[forecast_col].shift(-forecast_out)
 
-df.dropna(inplace=True)
-#pprint(df.tail())
-#pprint(df.head())
-
 X = np.array(df.drop(['label'],1))
-Y = np.array(df['label'])
+X_lately = X[ -forecast_out:]
 
+X = X[:-forecast_out] 
 X = preprocessing.scale(X)
+
+df.dropna(inplace=True)
 Y = np.array(df['label'])
 
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
+
+#linear regression 
 clf = LinearRegression()
+#clf = svm.SVR()
 clf.fit(X_train, Y_train)
 
 accuracy = clf.score(X_test, Y_test)
+#print (accuracy)
 
-print (accuracy)
+
 
 
 
