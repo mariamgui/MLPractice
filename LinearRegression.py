@@ -67,14 +67,12 @@ accuracy = clf.score(X_test, Y_test)
 # prediction for the next 35 days 
 
 forecast_set = clf.predict(X_lately)
-print (forecast_set, accuracy, forecast_out, len(forecast_set))
+print (forecast_set, accuracy, forecast_out)
 
 #plotting our prediction
 df['Forecast'] = np.nan
 last_date = df.iloc[-1].name
-print(last_date)
 last_date = datetime.datetime.strptime(last_date, '%Y-%m-%d')
-print(last_date)
 last_unix = last_date.timestamp() 
 one_day = 86400
 next_unix = last_unix + one_day
@@ -83,9 +81,8 @@ for i in forecast_set:
 	next_date = datetime.datetime.fromtimestamp(next_unix)
 	next_unix += one_day
 	df.loc[next_date] = [np.nan for _ in range(len(df.columns) - 1)] + [i]
-print(df.tail())
 
-
+# plotting
 df['Adj. Close'].plot()
 df['Forecast'].plot()
 plt.legend(loc = 4)
